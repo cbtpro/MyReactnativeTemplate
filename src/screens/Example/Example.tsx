@@ -6,6 +6,7 @@ import { useI18n, useUser } from '@/hooks';
 import { useTheme } from '@/theme';
 
 import { AssetByVariant, IconByVariant, Skeleton } from '@/components/atoms';
+import MultipleImagePicker from '@/components/medias/MultipleImagePicker';
 import { SafeScreen } from '@/components/templates';
 
 const MAX_RANDOM_ID = 9;
@@ -73,7 +74,9 @@ function Example() {
             />
           </View>
         </View>
-
+        <View style={[gutters.marginTop_40]}>
+          <MultipleImagePicker />
+        </View>
         <View style={[gutters.paddingHorizontal_32, gutters.marginTop_40]}>
           <View style={[gutters.marginTop_40]}>
             <Text style={[fonts.size_40, fonts.gray800, fonts.bold]}>
