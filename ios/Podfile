@@ -31,5 +31,14 @@ target 'MyReactnativeTemplate' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+    installer.pods_project.targets.each do |target|
+      # 禁用 Kingfisher 的 ABI 模块导出功能，避免生成 .swiftinterface 文件，规避 failed to verify module interface 类似的报错，提高 Xcode 构建稳定性
+      # https://github.com/onevcat/Kingfisher/issues/2379
+      if target.name == 'Kingfisher'
+        target.build_configurations.each do |config|
+          config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'NO'
+        end
+      end
+    end
   end
 end

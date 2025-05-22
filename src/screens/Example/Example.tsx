@@ -6,6 +6,8 @@ import { useI18n, useUser } from '@/hooks';
 import { useTheme } from '@/theme';
 
 import { AssetByVariant, IconByVariant, Skeleton } from '@/components/atoms';
+// import CameraRoll from '@/components/media/CameraRoll';
+import MultipleImagePicker from '@/components/media/MultipleImagePicker';
 import { SafeScreen } from '@/components/templates';
 
 const MAX_RANDOM_ID = 9;
@@ -72,6 +74,12 @@ function Example() {
               style={{ height: 300, width: 300 }}
             />
           </View>
+        </View>
+        {/* <View style={[layout.itemsCenter, gutters.marginTop_40]}>
+          <CameraRoll onFinish={() => {console.warn(1)}} />
+        </View> */}
+        <View style={[layout.itemsCenter, gutters.marginTop_40]}>
+          <MultipleImagePicker />
         </View>
 
         <View style={[gutters.paddingHorizontal_32, gutters.marginTop_40]}>
