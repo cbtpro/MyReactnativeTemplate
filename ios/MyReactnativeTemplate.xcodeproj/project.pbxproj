@@ -360,7 +360,7 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.chenbitao.MyReactnative;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.chenbitao.$(PRODUCT_NAME:MyReactnative)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyReactnativeTemplate.app/MyReactnativeTemplate";
 			};
@@ -384,7 +384,7 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.chenbitao.MyReactnative;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.chenbitao.$(PRODUCT_NAME:MyReactnative)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyReactnativeTemplate.app/MyReactnativeTemplate";
 			};
@@ -412,7 +412,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.chenbitao.MyReactnative;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.chenbitao.$(PRODUCT_NAME:MyReactnative)";
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.chenbitao.MyReactnative;
 				PRODUCT_NAME = MyReactnativeTemplate;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "MyReactnativeTemplate-Bridging-Header.h";
@@ -443,7 +444,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.chenbitao.MyReactnative;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.chenbitao.$(PRODUCT_NAME:MyReactnative)";
 				PRODUCT_NAME = MyReactnativeTemplate;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "MyReactnativeTemplate-Bridging-Header.h";
