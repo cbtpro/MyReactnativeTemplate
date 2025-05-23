@@ -71,7 +71,9 @@ yarn ios
 
 ### 🔁 添加新第三方依赖后的流程
 
-以安装 `@baronha/react-native-multiple-image-picker` 为例：
+在ReactNative的[directory](https://reactnative.directory/?search=%40baronha%2Freact-native-multiple-image-picker)里搜索项目。
+
+以安装 [`@baronha/react-native-multiple-image-picker`](https://nitrogenzlab.github.io/react-native-multiple-image-picker/getting-started) 为例：
 
 ```bash
 yarn add @baronha/react-native-multiple-image-picker
@@ -107,6 +109,8 @@ s.dependency 'Kingfisher', '~> 8.0'
 
 ### ✅ 解决办法：修改 Podfile 关闭 ABI 导出
 
+https://github.com/NitrogenZLab/react-native-multiple-image-picker/issues/229
+https://github.com/onevcat/Kingfisher/issues/2379
 将以下代码添加到 `ios/Podfile` 的 `post_install` 钩子中：
 
 ```ruby
