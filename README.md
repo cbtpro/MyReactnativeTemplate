@@ -216,3 +216,233 @@ npx react-native upgrade
 | 模块不兼容或构建失败  | 使用 `npx react-native upgrade` 更新依赖    |
 
 ---
+
+在 React Native 项目中，为了加快 Android 依赖的下载速度，您可能希望将 `node_modules/@react-native/gradle-plugin` 中的 `settings.gradle.kts` 文件替换为使用国内镜像源的版本。由于该文件位于 `node_modules` 目录中，每次安装依赖时可能会被覆盖，因此手动替换并不可行。以下是几种自动化的方法，供您参考：
+
+---
+
+## Custom patch
+### 使用 Patch 工具
+
+`patch-package` 是一个用于修改 `node_modules` 中依赖的工具，可以在安装依赖后自动应用补丁。
+
+1. **安装 `patch-package`**：
+
+   ```bash
+   npm install patch-package postinstall-postinstall --save-dev
+   ```
+
+
+
+2. **修改 `package.json`**：添加 `postinstall` 脚本：
+
+   ```json
+   {
+     "scripts": {
+       "postinstall": "patch-package"
+     }
+   }
+   ```
+
+
+
+3. **手动修改目标文件**：编辑 `node_modules/@react-native/gradle-plugin/settings.gradle.kts`，将其内容替换为您希望的版本。
+
+4. **生成补丁文件**：
+
+   ```bash
+   npx patch-package @react-native/gradle-plugin
+   ```
+
+
+
+这样，每次安装依赖后，`patch-package` 会自动应用补丁，保持您的修改。
+
+---
+
+下面是整理后的 Markdown 文档，结构清晰、格式统一、易于阅读：
+
+---
+
+# React Native 开发 Tips & 常见问题整理
+
+## 基础开发流程
+
+1. **设置淘宝镜像源**
+2. **使用 `npm` 或 `yarn` 安装依赖**
+3. **替换 `node_modules/@react-native/gradle-plugin/settings.gradle.kts` 文件为群内提供的版本**
+   （可加快 Android 依赖下载）
+4. **运行项目**
+
+```bash
+yarn android
+```
+
+---
+
+## 开发建议与调试技巧
+
+### 1. Metro 服务与原生工程的关系
+
+* React Native 的运行依赖于原生 Android/iOS 工程与 JavaScript 打包服务（Metro）。
+* 当仅修改 JS 代码（无原生依赖变化）时，无需执行 `yarn android` 重新运行原生工程。
+* 可以使用以下命令重启 Metro 服务：
+
+```bash
+yarn start
+```
+
+* 杀掉 App 重新打开即可自动重连 Metro，加载最新 JS。
+
+---
+
+### 2. 真机无线调试
+
+* 确保手机与电脑在 **同一局域网**。
+* 打开 App，摇动设备，进入 RN 调试菜单：
+
+  * 选择 `Settings` → `Debug server host & port`
+  * 设置为：`<电脑IP>:8081`，例如：`192.168.1.100:8081`
+* 关闭并重启 App，即可重连 Metro 服务。
+
+---
+
+### 3. Android 模拟器调试配置
+
+#### 支持 x86 架构（加快模拟器运行速度）
+
+* 在 `android/gradle.properties` 添加：
+
+  ```properties
+  reactNativeArchitectures=arm64-v8a,x86
+  ```
+
+* 在 `app/build.gradle` 中添加：
+
+  ```groovy
+  abiFilters 'arm64-v8a', 'x86'
+  ```
+
+#### 快捷调出调试菜单
+
+* **iOS 模拟器**：`Cmd + D`
+* **Android 模拟器**：`Cmd + M` (macOS) / `Ctrl + M` (Windows/Linux)
+
+---
+
+### 一、Gradle 下载失败
+
+当执行到 `yarn android` 时，会尝试下载 `gradle-8.10.2-all.zip`，访问外网失败。
+
+#### 解决方法：
+
+修改 `android/gradle/wrapper/gradle-wrapper.properties` 文件，将：
+
+```properties
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.10.2-all.zip
+```
+
+替换为腾讯镜像源：
+
+```properties
+distributionUrl=https\://mirrors.cloud.tencent.com/gradle/gradle-8.10.2-all.zip
+```
+
+清除缓存并重新执行：
+
+```bash
+cd android
+./gradlew clean
+cd ../
+yarn android
+```
+
+---
+
+### 二、启动失败的可能原因
+
+#### 1. 缓存文件/构建文件损坏
+
+检查 `android/app/build.gradle` 是否包含模拟器所需架构：
+
+```groovy
+android {
+  defaultConfig {
+    ndk {
+      abiFilters ..., "x86", "x86_64"
+    }
+  }
+}
+```
+
+并确保 `android/gradle.properties` 包含对应配置：
+
+```properties
+reactNativeArchitectures=...,x86,x86_64
+```
+
+**可选**：如需开启已弃用的 NDK 支持（慎用）：
+
+```properties
+android.useDeprecatedNdk=true
+```
+
+#### 清理缓存并重新构建：
+
+```bash
+rm -rf android/app/build android/.gradle
+cd android
+./gradlew clean
+cd ../
+yarn android
+```
+
+rn-clean-start.sh
+```
+#!/bin/bash
+
+# React Native 清理 & 启动脚本
+# 适用于 macOS / Linux / Windows (Git Bash)
+
+set -e
+
+# 设置颜色输出
+GREEN='\033[0;32m'
+NC='\033[0m' # 无色
+
+echo -e "${GREEN}🔄 开始清理 React Native 项目...${NC}"
+
+# 清理缓存和构建文件
+rm -rf node_modules
+rm -rf android/.gradle
+rm -rf android/app/build
+rm -rf ios/Pods ios/build
+rm -rf ~/.gradle/caches/
+watchman watch-del-all 2>/dev/null || true
+
+# 清理 Metro 缓存
+rm -rf $TMPDIR/metro-* || true
+
+# 重新安装依赖
+echo -e "${GREEN}📦 正在安装依赖...${NC}"
+yarn install
+
+# 进入 Android 文件夹执行 clean
+cd android
+./gradlew clean
+cd ..
+
+echo -e "${GREEN}🚀 启动 Metro 服务...${NC}"
+yarn start &
+
+# 等待 Metro 启动片刻（可选）
+sleep 2
+
+echo -e "${GREEN}📱 启动 Android 应用...${NC}"
+yarn android
+
+```
+
+chmod +x rn-clean-start.sh
+---
+
