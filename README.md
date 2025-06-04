@@ -222,6 +222,7 @@ npx react-native upgrade
 ---
 
 ## Custom patch
+
 ### 使用 Patch 工具
 
 `patch-package` 是一个用于修改 `node_modules` 中依赖的工具，可以在安装依赖后自动应用补丁。
@@ -231,8 +232,6 @@ npx react-native upgrade
    ```bash
    npm install patch-package postinstall-postinstall --save-dev
    ```
-
-
 
 2. **修改 `package.json`**：添加 `postinstall` 脚本：
 
@@ -244,8 +243,6 @@ npx react-native upgrade
    }
    ```
 
-
-
 3. **手动修改目标文件**：编辑 `node_modules/@react-native/gradle-plugin/settings.gradle.kts`，将其内容替换为您希望的版本。
 
 4. **生成补丁文件**：
@@ -253,8 +250,6 @@ npx react-native upgrade
    ```bash
    npx patch-package @react-native/gradle-plugin
    ```
-
-
 
 这样，每次安装依赖后，`patch-package` 会自动应用补丁，保持您的修改。
 
@@ -284,26 +279,27 @@ yarn android
 
 ### 1. Metro 服务与原生工程的关系
 
-* React Native 的运行依赖于原生 Android/iOS 工程与 JavaScript 打包服务（Metro）。
-* 当仅修改 JS 代码（无原生依赖变化）时，无需执行 `yarn android` 重新运行原生工程。
-* 可以使用以下命令重启 Metro 服务：
+- React Native 的运行依赖于原生 Android/iOS 工程与 JavaScript 打包服务（Metro）。
+- 当仅修改 JS 代码（无原生依赖变化）时，无需执行 `yarn android` 重新运行原生工程。
+- 可以使用以下命令重启 Metro 服务：
 
 ```bash
 yarn start
 ```
 
-* 杀掉 App 重新打开即可自动重连 Metro，加载最新 JS。
+- 杀掉 App 重新打开即可自动重连 Metro，加载最新 JS。
 
 ---
 
 ### 2. 真机无线调试
 
-* 确保手机与电脑在 **同一局域网**。
-* 打开 App，摇动设备，进入 RN 调试菜单：
+- 确保手机与电脑在 **同一局域网**。
+- 打开 App，摇动设备，进入 RN 调试菜单：
 
-  * 选择 `Settings` → `Debug server host & port`
-  * 设置为：`<电脑IP>:8081`，例如：`192.168.1.100:8081`
-* 关闭并重启 App，即可重连 Metro 服务。
+  - 选择 `Settings` → `Debug server host & port`
+  - 设置为：`<电脑IP>:8081`，例如：`192.168.1.100:8081`
+
+- 关闭并重启 App，即可重连 Metro 服务。
 
 ---
 
@@ -311,13 +307,13 @@ yarn start
 
 #### 支持 x86 架构（加快模拟器运行速度）
 
-* 在 `android/gradle.properties` 添加：
+- 在 `android/gradle.properties` 添加：
 
   ```properties
   reactNativeArchitectures=arm64-v8a,x86
   ```
 
-* 在 `app/build.gradle` 中添加：
+- 在 `app/build.gradle` 中添加：
 
   ```groovy
   abiFilters 'arm64-v8a', 'x86'
@@ -325,8 +321,8 @@ yarn start
 
 #### 快捷调出调试菜单
 
-* **iOS 模拟器**：`Cmd + D`
-* **Android 模拟器**：`Cmd + M` (macOS) / `Ctrl + M` (Windows/Linux)
+- **iOS 模拟器**：`Cmd + D`
+- **Android 模拟器**：`Cmd + M` (macOS) / `Ctrl + M` (Windows/Linux)
 
 ---
 
@@ -398,6 +394,7 @@ yarn android
 ```
 
 rn-clean-start.sh
+
 ```
 #!/bin/bash
 
@@ -443,6 +440,146 @@ yarn android
 
 ```
 
-chmod +x rn-clean-start.sh
+## chmod +x rn-clean-start.sh
+
+React Native 编译慢且很多时候处于 IDLE（空闲等待），主要原因多是构建系统没有充分利用 CPU、I/O 或缓存没命中。以下是实用的提速技巧和优化方案，帮你提升 Android 构建和 React Native 打包速度：
+
 ---
 
+## 1. **升级硬件资源 & 并行配置**
+
+- 多核 CPU：确保构建时能用上多核，多线程并行构建。
+- SSD：用固态硬盘，I/O 快。
+- 大内存：防止频繁读写硬盘和交换。
+
+---
+
+## 2. **Gradle 配置提速**
+
+在 `android/gradle.properties` 加入或确认以下配置：
+
+```properties
+# 开启并行构建，多模块时提升速度
+org.gradle.parallel=true
+
+# 开启守护进程，避免每次都启动 JVM
+org.gradle.daemon=true
+
+# Gradle 编译守护进程最大内存，默认 1G，改大点（根据机器内存）
+org.gradle.jvmargs=-Xmx4608m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+
+# 开启构建缓存，缓存编译结果
+org.gradle.caching=true
+
+# 关闭版本校验减少网络请求
+android.builder.sdkDownload=false
+
+# 开启 TLS1.2/1.3 支持，避免 TLS 握手失败
+systemProphttps.protocols=TLSv1.2,TLSv1.3
+```
+
+---
+
+## 3. **启用 Gradle 构建缓存和增量构建**
+
+React Native 自身支持增量构建，但你必须保证 Gradle 缓存和 Android build cache 启用。
+
+---
+
+## 4. **开启并行构建：加快 native 代码编译**
+
+`android/app/build.gradle` 里：
+
+```groovy
+android {
+    ...
+    // 并行编译 Native 代码
+    externalNativeBuild {
+        cmake {
+            arguments "-j$(nproc)"
+        }
+    }
+}
+```
+
+或在 `gradle.properties` 里：
+
+```properties
+org.gradle.parallel=true
+```
+
+---
+
+## 5. **关闭不必要的依赖和功能**
+
+- 如果不需要 Hermes 引擎，关闭它（否则 Hermes 也会编译耗时）：
+
+```groovy
+project.ext.react = [
+    enableHermes: false,
+]
+```
+
+- 关闭新架构（Fabric）或 React Native Codegen 功能试试。
+
+---
+
+## 6. **升级 React Native、Android Gradle Plugin（AGP）和 Gradle 版本**
+
+新版本通常优化了构建速度和缓存机制。
+
+---
+
+## 7. **使用 Jetifier + Proguard 需慎重**
+
+- Jetifier 开启会拖慢构建，确认是否真的需要。
+- Proguard 仅生产构建开启，平时 debug 关闭。
+
+---
+
+## 8. **使用命令行增量打包，避免重复全量构建**
+
+```bash
+# 编译 apk
+cd android
+./gradlew assembleDebug --parallel --info
+```
+
+加 `--parallel` 开启多线程构建。
+
+---
+
+## 9. **JavaScript Bundler 配置**
+
+- 使用 Metro 缓存；
+- 只打包变更文件，不重复打包整个 bundle。
+
+---
+
+## 10. **调试与分析构建瓶颈**
+
+- 使用 Gradle 的 `--profile` 参数：
+
+```bash
+./gradlew assembleDebug --profile
+```
+
+生成报告，定位最耗时任务。
+
+---
+
+## 11. **持续集成或云端构建**
+
+- 本地性能有限，可以用云端 CI 系统做缓存和并行编译。
+
+---
+
+## 总结
+
+- 优化 Gradle 配置（并行、缓存、守护进程）
+- 减少无用功能（Hermes、新架构）
+- 采用更好的硬件
+- 定期清理和升级依赖
+- 使用 `--profile` 监控和分析
+
+---
