@@ -19,7 +19,7 @@ echo "清理 Gradle 缓存目录..."
 cd android
 ./gradlew clean
 
-# echo "[6/6] 开始构建 Debug 版本..."
+# echo "开始构建 Debug 版本..."
 # ./gradlew assembleDebug
 
 echo "✅ 完成编译"
