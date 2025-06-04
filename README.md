@@ -583,3 +583,70 @@ cd android
 - 使用 `--profile` 监控和分析
 
 ---
+
+Window下需要长路径支持，将项目放到磁盘根目录下，尽量保证文件路径更短。
+在 Windows 中开启注册表以启用对长路径（超过 260 个字符）的支持，你可以按照以下步骤操作：
+
+---
+
+### ✅ 操作步骤：启用长路径支持
+
+1. **打开注册表编辑器**
+
+   * 按 `Win + R`，输入：`regedit`，然后按回车。
+
+2. **定位到以下路径：**
+
+   ```
+   HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem
+   ```
+
+3. **查找或创建名为 `LongPathsEnabled` 的 DWORD 值**
+
+   * 如果存在 `LongPathsEnabled`，双击它；
+   * 如果没有，右键空白区域选择“新建” > “DWORD（32位）值”，命名为：
+
+     ```
+     LongPathsEnabled
+     ```
+
+4. **设置其值为 `1`**
+
+   * 双击 `LongPathsEnabled`，在“数值数据”中输入：
+
+     ```
+     1
+     ```
+   * 确认基数为“十进制”。
+
+5. **重启计算机使设置生效。**
+
+---
+
+### ⚠ 注意事项：
+
+* 该设置 **仅适用于 Windows 10 1607（周年更新）及更高版本**，包括 Windows 11。
+* 启用长路径后，应用程序也需要启用相应的清单（manifest）支持才可真正访问长路径。
+
+---
+
+### 可选：使用命令行快速设置（管理员运行 PowerShell 或 CMD）
+
+```powershell
+REG ADD "HKLM\SYSTEM\CurrentControlSet\Control\FileSystem" /v LongPathsEnabled /t REG_DWORD /d 1 /f
+```
+
+---
+
+EnableLongPaths.reg
+```reg
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem]
+"LongPathsEnabled"=dword:00000001
+```
+
+Android Studio需要设置代理，自己的或者
+https://mirrors.cloud.tencent.com/AndroidSDK/
+https://mirrors.aliyun.com/android.googlesource.com/
+
