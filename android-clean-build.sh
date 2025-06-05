@@ -17,9 +17,9 @@ yarn react-native codegen
 
 echo "清理 Gradle 缓存目录..."
 cd android
-./gradlew clean
+./gradlew clean build
 
-# echo "开始构建 Debug 版本..."
-# ./gradlew assembleDebug
+echo "开始构建 Debug 版本..."
+./gradlew assembleDebug
 
 echo "✅ 完成编译"
