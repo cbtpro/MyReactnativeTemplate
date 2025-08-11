@@ -84,6 +84,7 @@
     "typescript-eslint": "^8.29.0"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=20",
+    "yarn": ">=1.22"
   }
 }

@@ -1,10 +1,8 @@
-当然可以，以下是你原始内容整理后的 **Markdown 文档格式**，内容结构清晰，便于阅读与维护：
-
----
-
 # 📱 MyReactnativeTemplate
 
----
+## 开发环境
+
+参照[官方文档](https://reactnative.cn/docs/environment-setup)配置安装环境，使用 yarn>1.22版本安装依赖。
 
 ## 🚀 快速命令
 
