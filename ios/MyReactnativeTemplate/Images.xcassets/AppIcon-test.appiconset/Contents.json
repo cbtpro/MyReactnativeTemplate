@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "cat_with_light_gray_background.png",
+      "filename" : "cat_mummy_test.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -13,7 +13,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "cat_with_light_gray_background 1.png",
+      "filename" : "cat_mummy_test 1.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -25,7 +25,7 @@
           "value" : "tinted"
         }
       ],
-      "filename" : "cat_with_light_gray_background 2.png",
+      "filename" : "cat_mummy_test 2.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
