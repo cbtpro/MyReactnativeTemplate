@@ -326,20 +326,20 @@ yarn start
 
 ### 一、Gradle 下载失败
 
-当执行到 `yarn android` 时，会尝试下载 `gradle-8.10.2-all.zip`，访问外网失败。
+`当执行到 `yarn android` 时，会尝试下载 `gradle-8.14.3-all.zip`，访问外网失败。
 
 #### 解决方法：
 
 修改 `android/gradle/wrapper/gradle-wrapper.properties` 文件，将：
 
 ```properties
-distributionUrl=https\://services.gradle.org/distributions/gradle-8.10.2-all.zip
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.14.3-all.zip
 ```
 
 替换为腾讯镜像源：
 
 ```properties
-distributionUrl=https\://mirrors.cloud.tencent.com/gradle/gradle-8.10.2-all.zip
+distributionUrl=https\://mirrors.cloud.tencent.com/gradle/gradle-8.14.3-all.zip
 ```
 
 清除缓存并重新执行：
