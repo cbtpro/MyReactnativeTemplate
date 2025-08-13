@@ -1,13 +1,15 @@
 {
   "extends": "@react-native/typescript-config",
   "compilerOptions": {
+    "typeRoots": [
+      "./src/types",
+      "./node_modules/@types"
+    ],
     "baseUrl": ".",
     "paths": {
       "*": ["src/*"],
       "tests": ["tests/*"],
       "@/*": ["src/*"],
-      // "@components/*": ["src/components/*"],
-      // "@/screens/*": ["src/screens/*"]
     },
   },
 }

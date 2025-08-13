@@ -2,7 +2,6 @@ import type { ReactElement } from 'react';
 import type { SvgProps } from 'react-native-svg';
 
 import { useMemo } from 'react';
-import { z } from 'zod';
 
 import { useTheme } from '@/theme';
 import getAssetsContext from '@/theme/assets/getAssetsContext';
@@ -29,13 +28,8 @@ function IconByVariant({
   const Icon = useMemo((): IconComponent => {
     try {
       const getDefaultSource = (): IconComponent => {
-        const module = z
-          .object({
-            default: z.function({ input: z.tuple([]), output: z.custom<ReactElement<SvgProps>>() }),
-          })
-          .parse(icons(`./${path}.${EXTENSION}`));
-        
-        return module.default as IconComponent;
+        const module = icons(`./${path}.${EXTENSION}`) as { default: IconComponent };
+        return module.default;
       };
 
       if (variant === 'default') {
@@ -43,13 +37,8 @@ function IconByVariant({
       }
 
       try {
-        const fetchedModule = z
-          .object({
-            default: z.function({ input: z.tuple([]), output: z.custom<ReactElement<SvgProps>>() }),
-          })
-          .parse(icons(`./${variant}/${path}.${EXTENSION}`));
-
-        return fetchedModule.default as IconComponent;
+        const fetchedModule = icons(`./${variant}/${path}.${EXTENSION}`) as { default: IconComponent };
+        return fetchedModule.default;
       } catch (error) {
         console.warn(
           `Couldn't load the icon: ${path}.${EXTENSION} for the variant ${variant}, Fallback to default`,

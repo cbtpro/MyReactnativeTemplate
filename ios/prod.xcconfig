@@ -1,0 +1,3 @@
+#include? "Pods/Target Support Files/Pods-MyReactnativeTemplate/Pods-MyReactnativeTemplate.release.xcconfig"
+
+APP_DISPLAY_NAME=我的ReactNative

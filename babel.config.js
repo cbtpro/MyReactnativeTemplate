@@ -9,10 +9,10 @@ module.exports = {
          alias: {
            tests: ['./tests/'],
            "@": "./src",
-          //  "@components": "./src/components",
-          //  "@/screens": "./src/screens"
          }
        }
-    ]
+    ],
+    '@babel/plugin-proposal-export-namespace-from',
+    'react-native-worklets/plugin',
   ],
 };

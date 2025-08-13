@@ -1,0 +1,19 @@
+{
+  "myreactnativetemplate": {
+    "common_appName": {
+      "full": "MyReactnativeTemplate",
+      "initials": "RNB"
+    },
+    "common_error": "出了点问题。",
+    "screen_example": {
+      "hello_user": "你好，我叫 {{name}}",
+      "title": "欢迎使用 $t(common_appName.full)",
+      "description": "想要探索功能吗？点击屏幕底部的三个按钮中的任意一个。第一个可以调用 REST API，第二个可以更改主题颜色，第三个可以切换语言。"
+    },
+    "error_boundary": {
+      "title": "哎呀！出了点问题。",
+      "description": "很抱歉给您带来不便。请稍后重试。",
+      "cta": "重新加载页面"
+    }
+  }
+}
