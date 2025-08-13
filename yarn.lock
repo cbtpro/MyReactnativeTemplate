@@ -1048,7 +1048,7 @@
     "@babel/helper-string-parser" "^7.27.1"
     "@babel/helper-validator-identifier" "^7.27.1"
 
-"@baronha/react-native-multiple-image-picker@^2.2.4":
+"@baronha/react-native-multiple-image-picker@2.2.4":
   version "2.2.4"
   resolved "https://mirrors.tencent.com/npm/@baronha/react-native-multiple-image-picker/-/react-native-multiple-image-picker-2.2.4.tgz#7367d7a28a6dbaaa6066e5afd57702764b4c64f3"
   integrity sha512-5LLey7W0kMkhGm7cBpMwAcPKdqFeHREHj6mqEZZbRPFYPWmq5Up5fJIFYjy+boJgUqfQwWuWuR5aM75mCcB0lA==
