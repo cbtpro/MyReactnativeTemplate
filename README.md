@@ -4,6 +4,21 @@
 
 参照[官方文档](https://reactnative.cn/docs/environment-setup)配置安装环境，使用 yarn>1.22版本安装依赖。
 
+## 环境变量
+
+## 新增.env并修改
+
+```
+cp .env.template .env
+```
+
+### 修改 .xcode.env.local
+
+```
+echo export NODE_BINARY=$(command -v node) > ios/.xcode.env.local
+
+```
+
 ## 🚀 快速命令
 
 ### ✅ 启动 Android
